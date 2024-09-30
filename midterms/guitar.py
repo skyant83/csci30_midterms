@@ -30,14 +30,14 @@ if __name__ == '__main__':
                 notes[keyboard.index(key)].pluck()
                 print(keyL[keyboard.index(key) % len(keyL)])
 
-        # compute the superposition of samples
+        # compute the sum of samples if the note is pressed
         sample = 0
-        sample = sum(note.sample() for note in notes if note.isActive)
+        sample = sum(note.sample() for note in notes if note.isVibrating)
 
-        # play the sample on standard audio
+        # play the sample
         play_sample(sample)
 
-        # advance the simulation of each guitar string by one step
+        # advance the simulation of each guitar string by one step if the note was pressed
         for note in notes:
-            if note.isActive:
+            if note.isVibrating:
                 note.tick()

@@ -11,15 +11,13 @@ class GuitarString:
         '''
         Create a guitar string of the given frequency, using a sampling rate of 44100 Hz
         '''
-        #^ Check implementation
         # computes the max capacity of the ring buffer based on the frequency
-        #? self.capacity = int(np.ceil(44100 / frequency))
         self.capacity = int(-(-44100 // frequency))
         # constructs the ring buffer object
         self.buffer = RingBuffer(self.capacity)
-        # intializes counter for tick activations
+        # intializes counter for tick activations and sets the isVibrating to false
         self.tickTime = 0
-        self.isActive = False
+        self.isVibrating = False
         for _ in range(self.capacity):
             self.buffer.enqueue(0)
 
@@ -41,9 +39,8 @@ class GuitarString:
         '''
         Set the buffer to white noise
         '''
-        #^ Check implementation
         self.tickTime = 0
-        self.isActive = True
+        self.isVibrating = True
         for _ in range(self.capacity):
             self.buffer.dequeue()
             self.buffer.enqueue(random.uniform(-0.5, 0.5))
@@ -52,7 +49,6 @@ class GuitarString:
         '''
         Advance the simulation one time step by applying the Karplus--Strong update
         '''
-        #^ Check implementation
         tick_1 = self.buffer.dequeue()
         tick_2 = self.buffer.peek()
         curSample = 0.996 * 0.5 * (tick_1 + tick_2)
@@ -65,13 +61,10 @@ class GuitarString:
         '''
         Return the current sample
         '''
-        #^ Check implementation
-        # print(self.capacity)
         return self.buffer.peek()
     
     def time(self) -> int:
         '''
         Return the number of ticks so far
         '''
-        #^ Check implementation
         return self.tickTime
